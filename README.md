@@ -20,7 +20,7 @@ Manage products, suppliers, customers, inventory, and orders with secure authent
 
 ---
 
-# 📸 Project Preview (DEMO VIDEO) : 
+# 📸 Project Preview (DEMO VIDEO) : https://youtu.be/JeUnvAb0u98
 
 
 # 📑 Table of Contents
