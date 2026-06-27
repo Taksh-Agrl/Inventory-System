@@ -1,0 +1,22 @@
+{
+  "info": {
+    "name": "Inventory Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" }
+  ],
+  "item": [
+    { "name": "Register", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/auth/register", "body": { "mode": "raw", "raw": "{\"name\":\"Admin User\",\"email\":\"admin@example.com\",\"password\":\"Admin1234\",\"role\":\"ADMIN\"}" } } },
+    { "name": "Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/auth/login", "body": { "mode": "raw", "raw": "{\"email\":\"admin@inventory.local\",\"password\":\"Admin1234\"}" } } },
+    { "name": "Me", "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" } },
+    { "name": "Products", "request": { "method": "GET", "url": "{{baseUrl}}/products?page=1&limit=10" } },
+    { "name": "Create Product", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/products", "body": { "mode": "raw", "raw": "{\"name\":\"Desk Lamp\",\"sku\":\"LAMP-001\",\"category\":\"Office\",\"price\":39.99,\"currentStock\":20}" } } },
+    { "name": "Stock In", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/stocks/movement", "body": { "mode": "raw", "raw": "{\"productId\":1,\"quantity\":5,\"movementType\":\"ADD\",\"note\":\"Receiving\"}" } } },
+    { "name": "Adjust Stock", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/stocks/adjust", "body": { "mode": "raw", "raw": "{\"productId\":1,\"newQuantity\":50,\"note\":\"Cycle count\"}" } } },
+    { "name": "Create Order", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/orders", "body": { "mode": "raw", "raw": "{\"customer\":\"Acme Corp\",\"items\":[{\"productId\":1,\"quantity\":2}]}" } } },
+    { "name": "Cancel Order", "request": { "method": "POST", "url": "{{baseUrl}}/orders/1/cancel" } },
+    { "name": "Dashboard", "request": { "method": "GET", "url": "{{baseUrl}}/dashboard" } },
+    { "name": "History", "request": { "method": "GET", "url": "{{baseUrl}}/history" } }
+  ]
+}

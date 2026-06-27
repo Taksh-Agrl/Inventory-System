@@ -1,0 +1,67 @@
+CREATE DATABASE IF NOT EXISTS inventory_system;
+USE inventory_system;
+
+-- Prisma migrations are the source of truth. This SQL mirrors the logical schema for database review.
+CREATE TABLE Users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(191) NOT NULL,
+  email VARCHAR(191) NOT NULL UNIQUE,
+  passwordHash VARCHAR(191) NOT NULL,
+  role ENUM('ADMIN', 'EMPLOYEE') NOT NULL DEFAULT 'EMPLOYEE',
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL
+);
+
+CREATE TABLE Products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(191) NOT NULL,
+  sku VARCHAR(191) NOT NULL UNIQUE,
+  description TEXT NULL,
+  category VARCHAR(191) NOT NULL,
+  price DECIMAL(12,2) NOT NULL,
+  currentStock INT NOT NULL DEFAULT 0,
+  imageUrl VARCHAR(191) NULL,
+  createdById INT NOT NULL,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL,
+  FOREIGN KEY (createdById) REFERENCES Users(id)
+);
+
+CREATE TABLE Orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  orderNo VARCHAR(191) NOT NULL UNIQUE,
+  customer VARCHAR(191) NOT NULL,
+  status ENUM('PENDING', 'COMPLETED', 'CANCELLED') NOT NULL DEFAULT 'COMPLETED',
+  total DECIMAL(12,2) NOT NULL,
+  userId INT NOT NULL,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL,
+  FOREIGN KEY (userId) REFERENCES Users(id)
+);
+
+CREATE TABLE OrderItems (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  orderId INT NOT NULL,
+  productId INT NOT NULL,
+  quantity INT NOT NULL,
+  unitPrice DECIMAL(12,2) NOT NULL,
+  lineTotal DECIMAL(12,2) NOT NULL,
+  FOREIGN KEY (orderId) REFERENCES Orders(id) ON DELETE CASCADE,
+  FOREIGN KEY (productId) REFERENCES Products(id)
+);
+
+CREATE TABLE StockHistory (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  productId INT NOT NULL,
+  oldQuantity INT NOT NULL,
+  newQuantity INT NOT NULL,
+  difference INT NOT NULL,
+  movementType ENUM('ADD', 'REMOVE', 'ORDER', 'CANCEL', 'ADJUST') NOT NULL,
+  orderId INT NULL,
+  userId INT NOT NULL,
+  note VARCHAR(191) NULL,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (productId) REFERENCES Products(id),
+  FOREIGN KEY (orderId) REFERENCES Orders(id),
+  FOREIGN KEY (userId) REFERENCES Users(id)
+);
